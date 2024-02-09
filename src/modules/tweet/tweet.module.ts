@@ -4,6 +4,8 @@ import {
   TweetEntityMongo,
   TweetEntityMongoSchema,
 } from './application/entities/tweet.entity.mongo';
+import { CreateTweetUsecase } from './application/usecases/create-tweet.usecase';
+import { TweetDatasourceMongo } from './application/datasources/tweet.datasource.mongo';
 
 @Module({
   imports: [
@@ -13,6 +15,13 @@ import {
         schema: TweetEntityMongoSchema,
       },
     ]),
+  ],
+  providers: [
+    CreateTweetUsecase,
+    {
+      provide: 'TWEET_REPOSITORY',
+      useClass: TweetDatasourceMongo,
+    },
   ],
 })
 export class TweetModule {}
