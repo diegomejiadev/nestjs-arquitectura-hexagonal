@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ITweetDatasource } from '../../domain/datasources/tweet.datasource';
 import { CreateTweetDto } from '../../domain/dto/create-tweet.dto';
 
@@ -9,10 +14,12 @@ export class CreateTweetUsecase {
   ) {}
 
   async handle(body: CreateTweetDto) {
-    const result = await this.tweetDatasource.create(body);
+    try {
+      return await this.tweetDatasource.create(body);
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
 
-    return {
-      data: result,
-    };
+      throw new InternalServerErrorException('Internal server error');
+    }
   }
 }
