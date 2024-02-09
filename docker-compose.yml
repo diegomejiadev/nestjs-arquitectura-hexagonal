@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  mongo:
+    image: 'mongo'
+    environment:
+      - MONGO_INITDB_DATABASE=tweets
+    ports:
+      - 27017:27017
+    volumes:
+      - datadb:/data/db
+
+volumes:
+  datadb:
